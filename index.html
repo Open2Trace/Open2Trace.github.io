@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenTrace — Data Exposure Search</title>
+  <meta name="description" content="OpenTrace — Bot Telegram OSINT. Recherchez des données issues de fuites publiques à des fins de cybersécurité." />
+  <style>
+    :root{
+      --bg:#05070b;
+      --panel:#0b0f18;
+      --border:#141a2e;
+      --primary:#7aa2ff;
+      --text:#e9ecf1;
+      --muted:#9aa3b2;
+      --danger:#ff5d5d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background:radial-gradient(900px 500px at 50% -10%, #0f1a3a 0%, transparent 60%), var(--bg);
+      color:var(--text);
+    }
+    a{color:var(--primary); text-decoration:none}
+    .wrap{max-width:1100px; margin:auto; padding:24px}
+    header{display:flex; justify-content:space-between; align-items:center; padding:12px 0}
+    .logo{font-weight:800; letter-spacing:1px}
+    .tag{color:var(--muted); font-size:12px}
+    .hero{margin:80px 0 60px}
+    .hero h1{font-size:clamp(34px,6vw,64px); margin:0 0 12px}
+    .hero p{color:var(--muted); max-width:720px}
+    .search{
+      margin-top:32px;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:6px;
+      padding:14px;
+      display:flex; gap:10px
+    }
+    .search input{
+      flex:1; background:#060a14; border:1px solid var(--border);
+      color:var(--text); padding:12px; border-radius:4px; outline:none
+    }
+    .search button{
+      background:var(--primary); border:none; color:#000; font-weight:700;
+      padding:12px 18px; border-radius:4px; cursor:pointer
+    }
+    .note{font-size:12px; color:var(--muted); margin-top:8px}
+    section{margin:70px 0}
+    h2{font-size:22px; margin-bottom:16px}
+    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .box{background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:16px}
+    .ok{color:#57d68d}
+    .no{color:var(--danger)}
+    footer{border-top:1px solid var(--border); padding:24px 0; color:var(--muted); font-size:12px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .warning{background:#0b0f18;border:1px solid #2a335a;border-radius:6px;padding:14px;margin-top:24px;color:#9aa3b2;font-size:13px;line-height:1.5}
+.warning strong{color:#e9ecf1}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">OpenTrace</div>
+      <div class="tag">Telegram OSINT Bot</div>
+    </header><div class="warning">⚠️ Educational & OSINT purposes only. OpenTrace does not host data, does not collect personal information, and is not responsible for third‑party data leaks.</div>
+
+<div class="hero">
+      <h1>Search Public Data Exposures</h1>
+      <p>
+        OpenTrace est un <strong>bot Telegram</strong> permettant de rechercher des informations issues de
+        <strong>fuites de données rendues publiques</strong>. Outil dédié à la cybersécurité, l’OSINT
+        et la sensibilisation.
+      </p><div class="search">
+    <input type="text" placeholder="Email, username, phone, IP…" disabled />
+    <button disabled>Search</button>
+  </div>
+  <div class="note">La recherche se fait exclusivement via le bot Telegram.</div>
+</div>
+
+<section>
+  <h2>What is OpenTrace?</h2>
+  <div class="box">
+    OpenTrace indexe des bases de données compromises déjà publiques.
+    <strong>Aucune collecte illégale</strong> n’est effectuée et OpenTrace n’est pas à l’origine des fuites.
+  </div>
+</section>
+
+<section>
+  <h2>Usage Policy</h2>
+  <div class="grid">
+    <div class="box">
+      <h3 class="ok">Allowed</h3>
+      <ul>
+        <li>Check your own data</li>
+        <li>OSINT & threat intelligence</li>
+        <li>Cybersecurity awareness</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3 class="no">Forbidden</h3>
+      <ul>
+        <li>Doxing, harassment</li>
+        <li>Identity theft, fraud</li>
+        <li>Illegal activities</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Responsibility</h3>
+      Users are fully responsible for how they use the information provided.
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Community</h2>
+  <div class="grid">
+    <div class="box">🤖 Telegram Bot: OpenTrace</div>
+    <div class="box">💬 Telegram Group: coming soon</div>
+    <div class="box">🎮 Discord Server: coming soon</div>
+  </div>
+</section>
+
+<footer>
+  © 2026 OpenTrace — Public breach data only • No illegal content hosted
+</footer>
+
+  </div>
+</body>
+</html>
