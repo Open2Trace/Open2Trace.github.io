@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moteur de Recherche</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            font-size: 1em;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .results {
+            margin-top: 40px;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .result-item:hover {
+            background: #e8eaf6;
+            transform: translateX(10px);
+        }
+
+        .result-title {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .result-description {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .no-results {
+            color: #999;
+            font-size: 1.1em;
+            padding: 20px;
+        }
+
+        .search-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .results::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .results::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .results::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .results::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Recherche</h1>
+        <p class="subtitle">Trouvez exactement ce que vous cherchez</p>
+        
+        <div class="search-options">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="articles">Articles</button>
+            <button class="filter-btn" data-filter="images">Images</button>
+            <button class="filter-btn" data-filter="videos">Vidéos</button>
+        </div>
+
+        <div class="search-wrapper">
+            <input 
+                type="text" 
+                class="search-box" 
+                id="searchInput" 
+                placeholder="Entrez votre recherche..."
+                autocomplete="off"
+            >
+            <button class="search-btn" id="searchBtn">⌕</button>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        // Base de données de résultats de recherche
+        const searchDatabase = {
+            articles: [
+                {
+                    title: "Introduction à JavaScript",
+                    description: "Apprenez les bases de JavaScript pour développer des applications web modernes.",
+                    category: "articles",
+                    keywords: ["javascript", "web", "programmation"]
+                },
+                {
+                    title: "Guide complet du CSS",
+                    description: "Découvrez toutes les techniques avancées du CSS pour styliser vos pages web.",
+                    category: "articles",
+                    keywords: ["css", "style", "web", "design"]
+                },
+                {
+                    title: "HTML 5 - Les nouvelles balises",
+                    description: "Explorez les nouvelles balises HTML5 et leurs utilisations pratiques.",
+                    category: "articles",
+                    keywords: ["html", "html5", "web"]
+                },
+                {
+                    title: "React pour débutants",
+                    description: "Un tutoriel complet pour débuter avec la bibliothèque React.",
+                    category: "articles",
+                    keywords: ["react", "javascript", "framework"]
+                }
+            ],
+            images: [
+                {
+                    title: "Paysage montagneux",
+                    description: "Une belle photo de montagnes au coucher de soleil.",
+                    category: "images",
+                    keywords: ["montagne", "nature", "paysage"]
+                },
+                {
+                    title: "Code source illuminé",
+                    description: "Image de code source programmé sur écran noir.",
+                    category: "images",
+                    keywords: ["code", "programmation", "écran"]
+                }
+            ],
+            videos: [
+                {
+                    title: "Tutoriel JavaScript en 10 minutes",
+                    description: "Une introduction rapide aux concepts fondamentaux de JavaScript.",
+                    category: "videos",
+                    keywords: ["javascript", "tutoriel", "vidéo"]
+                },
+                {
+                    title: "Webinaire - Développement Web 2026",
+                    description: "Les tendances et technologies du développement web en 2026.",
+                    category: "videos",
+                    keywords: ["web", "développement", "tendances"]
+                }
+            ]
+        };
+
+        // Récupérer les éléments
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultsDiv = document.getElementById('results');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        let currentFilter = 'all';
+
+        // Gestion des filtres
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                if (searchInput.value) {
+                    performSearch();
+                }
+            });
+        });
+
+        // Effectuer la recherche
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            if (!query) {
+                resultsDiv.innerHTML = '<p class="no-results">Entrez un terme de recherche...</p>';
+                return;
+            }
+
+            let allResults = [];
+
+            // Rechercher dans la base de données
+            for (let category in searchDatabase) {
+                if (currentFilter !== 'all' && category !== currentFilter) continue;
+
+                searchDatabase[category].forEach(item => {
+                    const matchesQuery = 
+                        item.title.toLowerCase().includes(query) ||
+                        item.description.toLowerCase().includes(query) ||
+                        item.keywords.some(keyword => keyword.toLowerCase().includes(query));
+
+                    if (matchesQuery) {
+                        allResults.push(item);
+                    }
+                });
+            }
+
+            // Afficher les résultats
+            if (allResults.length === 0) {
+                resultsDiv.innerHTML = `<p class="no-results">Aucun résultat trouvé pour "${query}"</p>`;
+            } else {
+                resultsDiv.innerHTML = allResults.map(result => `
+                    <div class="result-item">
+                        <div class="result-title">${result.title}</div>
+                        <div class="result-description">${result.description}</div>
+                        <small style="color: #999; margin-top: 8px; display: block;">Catégorie: ${result.category}</small>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Événements
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Recherche en temps réel (optionnel)
+        searchInput.addEventListener('input', () => {
+            if (searchInput.value.length > 0) {
+                performSearch();
+            } else {
+                resultsDiv.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
